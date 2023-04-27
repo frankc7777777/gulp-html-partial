@@ -83,13 +83,15 @@ gulp.task('html', function () {
 const defaults = {
         basePath: '',
         tagName: 'partial',
-        variablePrefix: '@@'
+        variablePrefix: '@@',
+        RegExpVariable: false
     }
 ```
 
 - `basePath` - base path for your partials, relative to `gulpfile.js`
 - `tagName` - name of your partial tag, must have at least `src` attribute with path to partial file
 - `variablePrefix` - prefix of variable keys passed as attributes into partials
+- `RegExpVariable` - parse variable name by RegExp. if set to 'true', variable name only allow to use 'a-z A-Z 0-9 _' letters.
  
 
 # Notes

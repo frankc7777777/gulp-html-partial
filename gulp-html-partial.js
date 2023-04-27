@@ -19,7 +19,8 @@ module.exports = (function () {
     const options = {
         tagName: 'partial',
         basePath: '',
-        variablePrefix: '@@'
+        variablePrefix: '@@',
+        RegExpVariable: false,
     };
 
     /**
@@ -104,8 +105,16 @@ module.exports = (function () {
      * @returns {String}
      */
     function replaceAttributes(file, attributes) {
-        return (attributes || []).reduce((html, attrObj) =>
-            html.replace(options.variablePrefix + attrObj.key, attrObj.value), file && file.toString() || '');
+        return (attributes || []).reduce((html, attrObj) => {
+            if(options.RegExpVariable && options.variablePrefix != ''){
+                if(attrObj.key.match('[\W]') == null){
+                    return html.replace(new RegExp(options.variablePrefix+attrObj.key, 'ig'), attrObj.value);
+                }else{
+                    gutil.log(`${pluginName}:`, new gutil.PluginError(pluginName, gutil.colors.red(`'RegExpVariable' function allow only those 'a-z A-Z 0-9 _' letters.`)));
+                }
+            }
+            return html.replace(options.variablePrefix + attrObj.key, attrObj.value);
+        }, file && file.toString() || '');
     }
 
     /**
